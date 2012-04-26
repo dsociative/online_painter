@@ -16,9 +16,6 @@ def command_line_first_arg_is(word):
     return word == sys.argv[1]
 
 
-### Запуск сервера
-
-
 class TornadoDaemon(Daemon):
     ''' Базовый класс для запуска Торнадо как автозагружаемого скрипта '''
 
@@ -31,9 +28,6 @@ class TornadoDaemon(Daemon):
         self.app = application
         self.port = port
         Daemon.__init__(self, *args, **kwargs)
-
-    def init_run(self):
-        pass
 
     def run(self):
         ''' Создать app и запустить ioloop '''

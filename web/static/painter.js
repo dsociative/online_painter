@@ -14,30 +14,23 @@ $(document).ready(function() {
     
     tool = new Tool();
     
-    $.get('/pooling', function(data){
-    	process(data);
-    })
-    
+    load_action();
     tool.onMouseDown = function (event){
     	point = event.point.round();
     	
     	action(0, [[point.x, point.y], 40]);
-//    	var hit = project.hitTest(event.point);
-//    	console.log(hit);
-//    	if (hit){
-//    		if (hit.item){
-//    			var item = childs[hit.item._id];
-//    			var parent = assigns[item];
-//    			
-//    			removeCircle(parent, item);
-//    		}
-//    	}
     };
 });
 
+function load_action(){
+    $.get('/pooling', function(data){
+    	process(data);
+    })
+};
+
 function action(id, args){
 	$.post('/action', {id: id, args: JSON.stringify(args)});
-}
+};
 
 var updater = {
     errorSleepTime: 500,
@@ -68,12 +61,6 @@ var updater = {
         window.setTimeout(updater.poll, updater.errorSleepTime);
     },
 
-    newMessages: function(response) {
-    	process(response);
-    },
-
-    showMessage: function(message) {
-    }
 };
 
 var Painter = {

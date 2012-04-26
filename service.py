@@ -20,10 +20,4 @@ if __name__ == '__main__':
     if service.process_argv():
         pass
     else:
-        from tornado.httpserver import HTTPServer
-        from tornado.ioloop import IOLoop
-        srv = HTTPServer(app)
-        srv.bind(8888, '192.168.1.10')
-        srv.start(1)
-
-        IOLoop.instance().start()
+        service.run()
