@@ -31,7 +31,6 @@ class TornadoDaemon(Daemon):
 
     def run(self):
         ''' Создать app и запустить ioloop '''
-        self.init_run()
         self.server(self.app).listen(self.port)
         self.start_ioloop()
 

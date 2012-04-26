@@ -46,7 +46,7 @@ var updater = {
 
     onSuccess: function(response) {
         try {
-            updater.newMessages(response);
+            process(response);
         } catch (e) {
             updater.onError();
             return;
