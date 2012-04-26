@@ -2,6 +2,7 @@ paper.install(window);
 
 var tool_id = 0
 var points = [];
+var zoom_delta = 0.3
 
 $(document).ready(function() {
     updater.poll();
@@ -15,8 +16,6 @@ $(document).ready(function() {
     	    fillColor:'red',
     };
     
-    toolkit = [Path.Circle];
-    
     tool = new Tool();
     
     load_action();
@@ -27,16 +26,44 @@ $(document).ready(function() {
     };
     
     tool.onMouseUp = function (event){
+    	console.log(event.delta)
     	var point = event.point.round();
     	points.push(point);
     	
-    	if (points.length == 2){
+    	if (tool_id >= 0){
     		action(tool_id, points_ident.apply(this, points));
-    		points = [];
+    	} else {
+    		
+    		view.scrollBy(event.delta);
     	};
+    	
+    	points = [];
     };
-
+    
+    if(window.addEventListener)
+        document.addEventListener('DOMMouseScroll', zoom, false);
+    document.onmousewheel = zoom;
+    
 });
+
+function zoom(event)
+{
+    var delta = 0;
+ 
+    if (!event) event = window.event;
+    if (event.wheelDelta) {
+        delta = event.wheelDelta / 60;
+    } else if (event.detail) {
+        delta = -event.detail / 2;
+    }
+    
+    if (delta > 0){
+    	view.zoom += zoom_delta
+    } else if (view.zoom > 1) {
+    	view.zoom -= zoom_delta
+    }
+    
+}
 
 function points_ident(){
 	var seq = []
