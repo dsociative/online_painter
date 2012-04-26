@@ -10,4 +10,4 @@ class ToolTest(ZTest):
         t = Tool((100, 100), 50)
         t.assign(0)
 
-        self.eq(t.ident(), (0, ((100, 100), 50)))
+        self.eq(t.ident(), (0, ((100, 100))))

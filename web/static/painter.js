@@ -2,6 +2,8 @@ $(document).ready(function() {
     updater.poll();
     
     var canvas = document.getElementById('myCanvas');
+    var points = [];
+    
     paper.install(window);
     paper.setup(canvas);
 
@@ -15,12 +17,35 @@ $(document).ready(function() {
     tool = new Tool();
     
     load_action();
+    
     tool.onMouseDown = function (event){
-    	point = event.point.round();
-    	
-    	action(0, [[point.x, point.y], 40]);
+    	var point = event.point.round(); 
+    	points.push(point);
     };
+    
+    tool.onMouseUp = function (event){
+    	var point = event.point.round();
+    	points.push(point);
+    	
+    	if (points.length == 2){
+    		action(0, points_ident.apply(this, points));
+    		points = [];
+    	};
+    };
+
 });
+
+function points_ident(){
+	var seq = []
+	
+	for (var i in arguments){
+		seq.push([arguments[i].x, arguments[i].y])
+	}
+	console.log(arguments)
+	console.log(seq)
+	
+	return seq;
+};
 
 function load_action(){
     $.get('/pooling', function(data){
@@ -83,6 +108,7 @@ var Painter = {
 			var id = seq[no][0];
 			var args = seq[no][1];
 			
+			console.log(args)
 			objects.push(this.add(id, args));
 			
 		}
@@ -98,6 +124,5 @@ var Painter = {
 
 function process(response){
 	var data = JSON.parse(response)
-	console.log(data)
 	Painter.process(data);
 }

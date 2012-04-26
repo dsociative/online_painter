@@ -1,4 +1,5 @@
 # coding: utf8
+from engine.tool.point import Point
 
 
 class Tool(object):
@@ -8,9 +9,12 @@ class Tool(object):
         cls.id = value
         return cls
 
-    def __init__(self, point, radius):
-        self.point = point
-        self.radius = radius
+    def __init__(self, xy, *args, **kwargs):
+        self.point = Point(*xy)
+        self.init(*args, **kwargs)
+
+    def init(self, *args, **kwargs):
+        ''' personal tool init, override it '''
 
     def ident(self):
-        return self.id, (self.point, self.radius)
+        return self.id, (self.point.ident())
