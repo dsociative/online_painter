@@ -1,10 +1,13 @@
+paper.install(window);
+
+var tool_id = 0
+var points = [];
+
 $(document).ready(function() {
     updater.poll();
     
     var canvas = document.getElementById('myCanvas');
-    var points = [];
     
-    paper.install(window);
     paper.setup(canvas);
 
     project.currentStyle = {
@@ -28,7 +31,7 @@ $(document).ready(function() {
     	points.push(point);
     	
     	if (points.length == 2){
-    		action(0, points_ident.apply(this, points));
+    		action(tool_id, points_ident.apply(this, points));
     		points = [];
     	};
     };
@@ -90,8 +93,10 @@ var updater = {
 
 var Painter = {
 		
+	toolkit: [Path.Circle, Path.Line],
+		
 	add: function(id, args){
-		var tool = toolkit[id];
+		var tool = this.toolkit[id];
 		return tool.apply(this, args);
 	},
 	
@@ -105,12 +110,7 @@ var Painter = {
 		var objects = [];
 		
 		for (var no in seq){
-			var id = seq[no][0];
-			var args = seq[no][1];
-			
-			console.log(args)
-			objects.push(this.add(id, args));
-			
+			objects.push(this.add(seq[no][0], seq[no][1]));
 		}
 		
 		if (view){

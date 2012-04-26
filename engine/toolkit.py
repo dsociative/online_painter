@@ -1,11 +1,12 @@
 # coding: utf8
 
 from engine.tool.circle import Circle
+from engine.tool.line import Line
 
 
 class ToolKit(object):
 
-    tools = [Circle]
+    tools = [Circle, Line]
 
     def __init__(self):
         self.calculate()
