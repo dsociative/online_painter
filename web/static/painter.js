@@ -1,90 +1,72 @@
 paper.install(window);
 
-var tool_id = 0
-var points = [];
-var zoom_delta = 0.3
+var tool_id = 0;
+var zoom_delta = 0.3;
 
-$(document).ready(function() {
+$(document).ready(function () {
     updater.poll();
-    
     var canvas = document.getElementById('myCanvas');
-    
     paper.setup(canvas);
 
     project.currentStyle = {
-    	    strokeColor: 'black',
-    	    fillColor:'red',
+        strokeColor: 'black',
+        fillColor: 'red',
     };
-    
+
     tool = new Tool();
-    
     load_action();
-    
-    tool.onMouseDown = function (event){
-    	var point = event.point.round(); 
-    	points.push(point);
+
+    tool.onMouseUp = function (event) {
+        if (tool_id >= 0) {
+            action(tool_id, points_ident(event.downPoint.round(), event.point.round()));
+        } else {
+            view.scrollBy([-event.delta.x, -event.delta.y]);
+        }
     };
-    
-    tool.onMouseUp = function (event){
-    	console.log(event.delta)
-    	var point = event.point.round();
-    	points.push(point);
-    	
-    	if (tool_id >= 0){
-    		action(tool_id, points_ident.apply(this, points));
-    	} else {
-    		
-    		view.scrollBy(event.delta);
-    	};
-    	
-    	points = [];
-    };
-    
+
     if(window.addEventListener)
         document.addEventListener('DOMMouseScroll', zoom, false);
     document.onmousewheel = zoom;
-    
 });
 
-function zoom(event)
-{
+function zoom(event) {
     var delta = 0;
- 
-    if (!event) event = window.event;
+
+    if (!event) {
+        event = window.event;
+    }
     if (event.wheelDelta) {
         delta = event.wheelDelta / 60;
     } else if (event.detail) {
         delta = -event.detail / 2;
     }
-    
-    if (delta > 0){
-    	view.zoom += zoom_delta
+
+    if (delta > 0) {
+        view.zoom += zoom_delta;
     } else if (view.zoom > 1) {
-    	view.zoom -= zoom_delta
+        view.zoom -= zoom_delta;
     }
-    
 }
 
 function points_ident(){
-	var seq = []
-	
-	for (var i in arguments){
-		seq.push([arguments[i].x, arguments[i].y])
-	}
-	console.log(arguments)
-	console.log(seq)
-	
-	return seq;
+    var seq = [];
+
+    for (var i in arguments){
+        seq.push([arguments[i].x, arguments[i].y])
+    }
+    console.log(arguments)
+    console.log(seq)
+    return seq;
 };
 
 function load_action(){
     $.get('/pooling', function(data){
-    	process(data);
+        process(data);
     })
 };
 
 function action(id, args){
-	$.post('/action', {id: id, args: JSON.stringify(args)});
+    $.post('/action', {id: id, args: JSON.stringify(args)});
 };
 
 var updater = {
@@ -119,37 +101,37 @@ var updater = {
 };
 
 var Painter = {
-		
-	toolkit: [Path.Circle, Path.Line],
-		
-	add: function(id, args){
-		var tool = this.toolkit[id];
-		return tool.apply(this, args);
-	},
-	
-	clear: function(){
-	    project.activeLayer.remove();
-	    var layer = new Layer();
-	},
-	
-	process: function(seq){
-		this.clear();
-		var objects = [];
-		
-		for (var no in seq){
-			objects.push(this.add(seq[no][0], seq[no][1]));
-		}
-		
-		if (view){
-			view.draw();
-		}
-		
-		return objects;
-	}
-	
+
+    toolkit: [Path.Circle, Path.Line],
+
+    add: function(id, args){
+        var tool = this.toolkit[id];
+        return tool.apply(this, args);
+    },
+
+    clear: function(){
+        project.activeLayer.remove();
+        var layer = new Layer();
+    },
+
+    process: function(seq){
+        this.clear();
+        var objects = [];
+
+        for (var no in seq){
+            objects.push(this.add(seq[no][0], seq[no][1]));
+        }
+
+        if (view){
+            view.draw();
+        }
+
+        return objects;
+    }
+
 }
 
 function process(response){
-	var data = JSON.parse(response)
-	Painter.process(data);
+    var data = JSON.parse(response)
+    Painter.process(data);
 }

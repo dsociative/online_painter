@@ -8,6 +8,7 @@ from web.handler.index import Index
 from web.handler.pooling import Pooling
 from os.path import abspath
 
+
 urls = [url(r'/', Index, name='index'),
         url(r'/pooling', Pooling, name='pooling'),
         url(r'/action', Action, name='action'), ]
