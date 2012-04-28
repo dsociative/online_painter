@@ -13,5 +13,5 @@ class CircleTest(ZTest):
         t = Circle((100, 100), (100, 40))
 
         self.eq(t.radius, 60)
-        self.eq(t.ident(), (0, t.point.ident(), t.radius))
+        self.eq(t.ident(), (0, (t.point.ident(), t.radius)))
 

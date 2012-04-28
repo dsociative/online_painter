@@ -3,13 +3,15 @@
         <script src="{{ static_url('paper.js') }}" type="text/javascript" charset="utf-8"></script>
         <script src="{{ static_url('jquery.js') }}" type="text/javascript" charset="utf-8"></script>
         <script src="{{ static_url('painter.js') }}" type="text/javascript" charset="utf-8"></script>
+        <link type="text/css" rel="stylesheet" href="{{ static_url('style.css') }}">
         <title>Online Painter</title>
     </head>
     <body>
-        <button onclick="tool_id=0">Circle</button>
-        <button onclick="tool_id=1">Line</button>
-        <button onclick="tool_id=-1">Move</button>
-        
+        <div id="toolbar">
+	        <button onclick="tool_id=0">Circle</button>
+	        <button onclick="tool_id=1">Line</button>
+	        <button onclick="tool_id=-1">Move</button>
+        </div>
         <canvas id="myCanvas" resize></canvas>
     </body>
 </html>

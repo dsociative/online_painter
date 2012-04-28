@@ -10,8 +10,6 @@ class PainterTest(ZTest):
     def test_init(self):
         kit = ToolKit
         self.eq(kit.tools[0], Circle)
-        self.isfalse(hasattr(kit.tools[0], 'id'))
-
         kit = ToolKit()
         self.eq(kit.tools[0].id, kit.tools.index(Circle))
 

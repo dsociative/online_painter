@@ -11,7 +11,5 @@ class LineTest(ZTest):
 
     def test_ident(self):
         t = Line((100, 100), (100, 40))
-
-        self.eq(t.radius, 60)
         self.eq(t.ident(), (0, (t.point.ident(), t.end.ident())))
 
